@@ -1,5 +1,7 @@
 package at.alex_s168.reverse.api.universal;
 
+import at.alex_s168.reverse.api.universal.network.PacketBuffer;
+
 public class ClientUser implements Bufferable {
 
     public String client;
@@ -17,21 +19,23 @@ public class ClientUser implements Bufferable {
     }
 
     @Override
-    void readData(PacketBuffer buf) {
-        this.client = buf.readVarString();
-        this.userName = buf.readVarString();
-        this.status = buf.readVarEnum();
-        this.status2 = buf.readVarString();
-        this.ingameName = buf.readVarString();
+    public ClientUser readData(PacketBuffer buf) {
+        this.client = buf.readString(DEF.CLIENTNAME_MAX_LENGTH);
+        this.userName = buf.readString(DEF.USERNAME_LENGTH);
+        this.status = buf.readEnumValue(Status.class);
+        this.status2 = buf.readString(30);
+        this.ingameName = buf.readString(DEF.USERNAME_LENGTH);
+
+        return this;
     }
 
     @Override
-    void writeData(PacketBuffer buf) {
-        buf.writeVarString(client);
-        buf.writeVarString(userName);
-        buf.writeVarEnum(status);
-        buf.writeVarString(status2);
-        buf.writeVarString(ingameName);
+    public void writeData(PacketBuffer buf) {
+        buf.writeString(client);
+        buf.writeString(userName);
+        buf.writeEnumValue(status);
+        buf.writeString(status2);
+        buf.writeString(ingameName);
     }
 
 }

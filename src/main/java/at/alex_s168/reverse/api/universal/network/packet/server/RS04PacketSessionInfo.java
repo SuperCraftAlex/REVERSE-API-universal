@@ -1,6 +1,10 @@
 package at.alex_s168.reverse.api.universal.network.packet.server;
 
-// returned by server after RC05
+import at.alex_s168.reverse.api.universal.DEF;
+import at.alex_s168.reverse.api.universal.network.PacketBuffer;
+import at.alex_s168.reverse.api.universal.network.packet.Packet;
+
+import java.io.IOException;
 
 public class RS04PacketSessionInfo implements Packet
 {
@@ -15,12 +19,12 @@ public class RS04PacketSessionInfo implements Packet
     }
 
     public void readPacketData(PacketBuffer buf) throws IOException {
-        this.sid = buf.readVarString();
+        this.sid = buf.readString(DEF.SESSIONID_LENGTH);
         this.expirationDate = buf.readVarInt();
     }
 
     public void writePacketData(PacketBuffer buf) throws IOException{
-        buf.writeVarString(this.sid);
+        buf.writeString(this.sid);
         buf.writeVarInt(this.expirationDate);
     }
 

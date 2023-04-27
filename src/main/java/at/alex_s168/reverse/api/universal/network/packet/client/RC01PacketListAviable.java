@@ -1,5 +1,11 @@
 package at.alex_s168.reverse.api.universal.network.packet.client;
 
+import at.alex_s168.reverse.api.universal.DEF;
+import at.alex_s168.reverse.api.universal.network.PacketBuffer;
+import at.alex_s168.reverse.api.universal.network.packet.Packet;
+
+import java.io.IOException;
+
 public class RC01PacketListAviable implements Packet
 {
     public String sid;
@@ -11,11 +17,11 @@ public class RC01PacketListAviable implements Packet
     }
 
     public void readPacketData(PacketBuffer buf) throws IOException {
-        this.sid = buf.readVarString();
+        this.sid = buf.readString(DEF.SESSIONID_LENGTH);
     }
 
     public void writePacketData(PacketBuffer buf) throws IOException{
-        buf.writeVarString(this.sid);
+        buf.writeString(this.sid);
     }
 
 }

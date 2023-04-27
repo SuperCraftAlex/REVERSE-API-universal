@@ -1,6 +1,10 @@
 package at.alex_s168.reverse.api.universal.network.packet.server;
 
-// returned by server after RC03
+import at.alex_s168.reverse.api.universal.DEF;
+import at.alex_s168.reverse.api.universal.network.PacketBuffer;
+import at.alex_s168.reverse.api.universal.network.packet.Packet;
+
+import java.io.IOException;
 
 public class RS03PacketClientAuth implements Packet
 {
@@ -15,13 +19,13 @@ public class RS03PacketClientAuth implements Packet
     }
 
     public void readPacketData(PacketBuffer buf) throws IOException {
-        this.client = buf.readVarString();
-        this.launchToken = buf.readVarString();
+        this.client = buf.readString(DEF.CLIENTNAME_MAX_LENGTH);
+        this.launchToken = buf.readString(DEF.LAUNCHTOKEN_LENGTH);
     }
 
     public void writePacketData(PacketBuffer buf) throws IOException{
-        buf.writeVarString(this.client);
-        buf.writeVarString(this.launchToken);
+        buf.writeString(this.client);
+        buf.writeString(this.launchToken);
     }
 
 }

@@ -1,5 +1,7 @@
 package at.alex_s168.reverse.api.universal.network.packet;
 
+import at.alex_s168.reverse.api.universal.network.PacketBuffer;
+
 import java.io.IOException;
 
 public interface Packet

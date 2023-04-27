@@ -1,7 +1,11 @@
 package at.alex_s168.reverse.api.universal.network.packet.server;
 
-import at.alex_s168.reverse.api.universal.Client;
 import at.alex_s168.reverse.api.universal.ClientInfo;
+import at.alex_s168.reverse.api.universal.DEF;
+import at.alex_s168.reverse.api.universal.network.PacketBuffer;
+import at.alex_s168.reverse.api.universal.network.packet.Packet;
+
+import java.io.IOException;
 
 public class RS02PacketClientInfoResult implements Packet
 {
@@ -17,32 +21,32 @@ public class RS02PacketClientInfoResult implements Packet
     }
 
     public void readPacketData(PacketBuffer buf) throws IOException {
-        this.name = buf.readVarString();
+        this.name = buf.readString(DEF.CLIENTNAME_MAX_LENGTH);
         info = new ClientInfo();
 
-        info.name = buf.readVarString();
-        info.visibleName = buf.readVarString();
-        info.description = buf.readVarString();
-        info.versions = buf.readVarStringArray();
-        info.authors = buf.readVarStringArray();
+        info.name = buf.readString(DEF.CLIENTNAME_MAX_LENGTH);
+        info.visibleName = buf.readString(DEF.CLIENTNAME_MAX_LENGTH);
+        info.description = buf.readString(DEF.STRING_LENGTH);
+        info.versions = buf.readStringArray(2_000);
+        info.authors = buf.readStringArray(30);
         info.clientId = buf.readVarInt();
-        info.defaultLaunchArgs = buf.readVarString();
-        info.downloadsAssets = buf.readVarStringArray();
-        info.downloadsLibraries = buf.readVarStringArray();
+        info.defaultLaunchArgs = buf.readString(DEF.STRING_LENGTH);
+        info.downloadsAssets = buf.readStringArray(1_000);
+        info.downloadsLibraries = buf.readStringArray(1_000);
     }
 
     public void writePacketData(PacketBuffer buf) throws IOException{
-        buf.writeVarString(this.name);
+        buf.writeString(this.name);
 
-        buf.writeVarString(info.name);
-        buf.writeVarString(info.visibleName);
-        buf.writeVarString(info.description);
-        buf.writeVarStringArray(info.versions);
-        buf.writeVarStringArray(info.authors);
+        buf.writeString(info.name);
+        buf.writeString(info.visibleName);
+        buf.writeString(info.description);
+        buf.writeStringArray(info.versions);
+        buf.writeStringArray(info.authors);
         buf.writeVarInt(info.clientId);
-        buf.writeVarString(info.defaultLaunchArgs);
-        buf.writeVarStringArray(info.downloadsAssets);
-        buf.writeVarStringArray(info.downloadsLibraries);
+        buf.writeString(info.defaultLaunchArgs);
+        buf.writeStringArray(info.downloadsAssets);
+        buf.writeStringArray(info.downloadsLibraries);
     }
 
 }
