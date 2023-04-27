@@ -1,29 +1,27 @@
 package at.alex_s168.reverse.api.universal.network.packet.server;
 
-import java.util.List;
-
 import at.alex_s168.reverse.api.universal.ClientUser;
 import at.alex_s168.reverse.api.universal.network.RPacketBuffer;
 import at.alex_s168.reverse.api.universal.network.packet.RPacket;
 
 import java.io.IOException;
 
-public class RS05PacketOnlineClientUser implements RPacket
+public class RS06PacketUserInfo implements RPacket
 {
-    public List<ClientUser> users;
+    public ClientUser user;
 
-    public RS05PacketOnlineClientUser() {}
+    public RS06PacketUserInfo() {}
 
-    public RS05PacketOnlineClientUser(List<ClientUser> users) {
-        this.users = users;
+    public RS06PacketUserInfo(ClientUser user) {
+        this.user = user;
     }
 
     public void readPacketData(RPacketBuffer buf) throws IOException {
-        this.users = (List<ClientUser>) buf.readList(ClientUser.class);
+        this.user = new ClientUser().readData(buf);
     }
 
     public void writePacketData(RPacketBuffer buf) throws IOException{
-        buf.writeList(users);
+        this.user.writeData(buf);
     }
 
 }

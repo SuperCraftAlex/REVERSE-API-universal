@@ -1,12 +1,13 @@
 package at.alex_s168.reverse.api.universal.network;
 
-import at.alex_s168.reverse.api.universal.Bufferable;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
 
 import java.io.*;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
@@ -19,11 +20,11 @@ import java.util.List;
 
 import io.netty.util.ByteProcessor;
 
-public class PacketBuffer extends ByteBuf
+public class RPacketBuffer extends ByteBuf
 {
     private final ByteBuf buf;
 
-    public PacketBuffer(ByteBuf wrapped)
+    public RPacketBuffer(ByteBuf wrapped)
     {
         this.buf = wrapped;
     }
@@ -45,7 +46,7 @@ public class PacketBuffer extends ByteBuf
         return 5;
     }
 
-    public PacketBuffer writeByteArray(byte[] array)
+    public RPacketBuffer writeByteArray(byte[] array)
     {
         this.writeVarInt(array.length);
         this.writeBytes(array);
@@ -73,7 +74,7 @@ public class PacketBuffer extends ByteBuf
         }
     }
 
-    public PacketBuffer writeStringArray(String[] array) throws IOException {
+    public RPacketBuffer writeStringArray(String[] array) throws IOException {
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         final ObjectOutputStream objectOutputStream =
                 new ObjectOutputStream(byteArrayOutputStream);
@@ -118,7 +119,7 @@ public class PacketBuffer extends ByteBuf
         return list;
     }
 
-    public PacketBuffer writeList(List<? extends Bufferable> list) {
+    public RPacketBuffer writeList(List<? extends Bufferable> list) throws IOException {
         writeVarInt(list.size());
         for(Bufferable e : list) {
             e.writeData(this);
@@ -126,10 +127,23 @@ public class PacketBuffer extends ByteBuf
         return this;
     }
 
+    public InetAddress readIP() {
+        try {
+            return InetAddress.getByAddress(readByteArray());
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public RPacketBuffer writeIP(InetAddress ip) {
+        writeByteArray(ip.getAddress());
+        return this;
+    }
+
     /**
      * Writes an array of VarInts to the buffer, prefixed by the length of the array (as a VarInt).
      */
-    public PacketBuffer writeVarIntArray(int[] array)
+    public RPacketBuffer writeVarIntArray(int[] array)
     {
         this.writeVarInt(array.length);
 
@@ -168,7 +182,7 @@ public class PacketBuffer extends ByteBuf
         return (T)((Enum[])enumClass.getEnumConstants())[this.readVarInt()];
     }
 
-    public PacketBuffer writeEnumValue(Enum<?> value)
+    public RPacketBuffer writeEnumValue(Enum<?> value)
     {
         return this.writeVarInt(value.ordinal());
     }
@@ -231,7 +245,7 @@ public class PacketBuffer extends ByteBuf
      * whether the next byte is part of that same int. Micro-optimization for int values that are expected to have
      * values below 128.
      */
-    public PacketBuffer writeVarInt(int input)
+    public RPacketBuffer writeVarInt(int input)
     {
         while ((input & -128) != 0)
         {
@@ -243,7 +257,7 @@ public class PacketBuffer extends ByteBuf
         return this;
     }
 
-    public PacketBuffer writeVarLong(long value)
+    public RPacketBuffer writeVarLong(long value)
     {
         while ((value & -128L) != 0L)
         {
@@ -288,7 +302,7 @@ public class PacketBuffer extends ByteBuf
         }
     }
 
-    public PacketBuffer writeString(String string)
+    public RPacketBuffer writeString(String string)
     {
         byte[] abyte = string.getBytes(StandardCharsets.UTF_8);
 

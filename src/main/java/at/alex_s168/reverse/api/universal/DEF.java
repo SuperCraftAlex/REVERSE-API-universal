@@ -11,5 +11,6 @@ public class DEF {
     public static int USERTOKEN_LENGTH = 32;
     public static int LAUNCHTOKEN_LENGTH = 32;
     public static int HWID_LENGTH = 32;
+    public static int ARTIFACT_LENGTH = 64;
 
 }

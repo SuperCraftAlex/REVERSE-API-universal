@@ -6,26 +6,35 @@ import at.alex_s168.reverse.api.universal.network.packet.RPacket;
 
 import java.io.IOException;
 
-public class RC07PacketOnlineClientUser implements RPacket
+public class RC08PacketRequestUserData implements RPacket
 {
-    public String client;
+    public String username;
+    public UsernameType type;
     public String launchToken;
 
-    public RC07PacketOnlineClientUser() {}
+    public RC08PacketRequestUserData() {}
 
-    public RC07PacketOnlineClientUser(String client, String launchToken) {
-        this.client = client;
+    public RC08PacketRequestUserData(String username, UsernameType type, String launchToken) {
+        this.username = username;
+        this.type = type;
         this.launchToken = launchToken;
     }
 
     public void readPacketData(RPacketBuffer buf) throws IOException {
-        this.client = buf.readString(DEF.CLIENTNAME_MAX_LENGTH);
+        this.username = buf.readString(DEF.CLIENTNAME_MAX_LENGTH);
+        this.type = buf.readEnumValue(UsernameType.class);
         this.launchToken = buf.readString(DEF.LAUNCHTOKEN_LENGTH);
     }
 
     public void writePacketData(RPacketBuffer buf) throws IOException{
-        buf.writeString(this.client);
+        buf.writeString(this.username);
+        buf.writeEnumValue(type);
         buf.writeString(this.launchToken);
+    }
+
+    public enum UsernameType {
+        REVERSE,
+        INGAME
     }
 
 }

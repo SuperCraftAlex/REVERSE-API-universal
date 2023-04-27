@@ -1,6 +1,7 @@
 package at.alex_s168.reverse.api.universal;
 
-import at.alex_s168.reverse.api.universal.network.PacketBuffer;
+import at.alex_s168.reverse.api.universal.network.Bufferable;
+import at.alex_s168.reverse.api.universal.network.RPacketBuffer;
 
 public class ClientUser implements Bufferable {
 
@@ -19,7 +20,7 @@ public class ClientUser implements Bufferable {
     }
 
     @Override
-    public ClientUser readData(PacketBuffer buf) {
+    public ClientUser readData(RPacketBuffer buf) {
         this.client = buf.readString(DEF.CLIENTNAME_MAX_LENGTH);
         this.userName = buf.readString(DEF.USERNAME_LENGTH);
         this.status = buf.readEnumValue(Status.class);
@@ -30,7 +31,7 @@ public class ClientUser implements Bufferable {
     }
 
     @Override
-    public void writeData(PacketBuffer buf) {
+    public void writeData(RPacketBuffer buf) {
         buf.writeString(client);
         buf.writeString(userName);
         buf.writeEnumValue(status);

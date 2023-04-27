@@ -1,31 +1,32 @@
-package at.alex_s168.reverse.api.universal.network.packet.server;
+package at.alex_s168.reverse.api.universal.network.packet.client;
 
 import at.alex_s168.reverse.api.universal.DEF;
+import at.alex_s168.reverse.api.universal.Downloadable;
 import at.alex_s168.reverse.api.universal.network.RPacketBuffer;
 import at.alex_s168.reverse.api.universal.network.packet.RPacket;
 
 import java.io.IOException;
 
-public class RS03PacketClientAuth implements RPacket
+public class RC0APacketRequestDownloadB implements RPacket
 {
-    public String client;
     public String launchToken;
+    public Downloadable element;
 
-    public RS03PacketClientAuth() {}
+    public RC0APacketRequestDownloadB() {}
 
-    public RS03PacketClientAuth(String client, String launchToken) {
-        this.client = client;
+    public RC0APacketRequestDownloadB(String launchToken, Downloadable element) {
         this.launchToken = launchToken;
+        this.element = element;
     }
 
     public void readPacketData(RPacketBuffer buf) throws IOException {
-        this.client = buf.readString(DEF.CLIENTNAME_MAX_LENGTH);
         this.launchToken = buf.readString(DEF.LAUNCHTOKEN_LENGTH);
+        this.element = new Downloadable().readData(buf);
     }
 
     public void writePacketData(RPacketBuffer buf) throws IOException{
-        buf.writeString(this.client);
         buf.writeString(this.launchToken);
+        this.element.writeData(buf);
     }
 
 }
