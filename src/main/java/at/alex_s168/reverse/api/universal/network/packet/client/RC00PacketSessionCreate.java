@@ -12,14 +12,18 @@ public class RC00PacketSessionCreate implements RPacket
     public String userToken;
     public String hwid;
     public int protocolVersion;
+    public String username;
+    public String password;
 
     public RC00PacketSessionCreate() {}
 
-    public RC00PacketSessionCreate(int launcherID, String userToken, String hwid) {
+    public RC00PacketSessionCreate(int launcherID, String userToken, String hwid, String username, String password) {
         this.launcherID = launcherID;
         this.userToken = userToken;
         this.hwid = hwid;
         this.protocolVersion = DEF.PROTOCOL_VERSION;
+        this.username = username;
+        this.password = password;
     }
 
     public void readPacketData(RPacketBuffer buf) throws IOException {
@@ -27,6 +31,8 @@ public class RC00PacketSessionCreate implements RPacket
         this.userToken = buf.readString(DEF.USERTOKEN_LENGTH);
         this.hwid = buf.readString(DEF.HWID_LENGTH);
         this.protocolVersion = buf.readVarInt();
+        this.username = buf.readString(DEF.USERNAME_LENGTH);
+        this.password = buf.readString(DEF.PASSWORD_LENGTH);
     }
 
     public void writePacketData(RPacketBuffer buf) throws IOException{
@@ -34,6 +40,8 @@ public class RC00PacketSessionCreate implements RPacket
         buf.writeString(this.userToken);
         buf.writeString(this.hwid);
         buf.writeVarInt(this.protocolVersion);
+        buf.writeString(this.username);
+        buf.writeString(this.password);
     }
 
 }

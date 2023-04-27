@@ -6,39 +6,33 @@ import at.alex_s168.reverse.api.universal.network.packet.RPacket;
 
 import java.io.IOException;
 
-public class RS07PacketDownloadResult implements RPacket
+public class RS0BPacketRedeemTokenResult implements RPacket
 {
-    public String artifactId;
     public Result result;
-    public byte[] value;
+    public String redeemedClient;
 
-    public RS07PacketDownloadResult() {}
+    public RS0BPacketRedeemTokenResult() {}
 
-    public RS07PacketDownloadResult(String artifactId, Result result, byte[] value) {
-        this.artifactId = artifactId;
+    public RS0BPacketRedeemTokenResult(Result result, String redeemedClient) {
         this.result = result;
-        this.value = value;
+        this.redeemedClient = redeemedClient;
     }
 
     public void readPacketData(RPacketBuffer buf) throws IOException {
-        this.artifactId = buf.readString(DEF.ARTIFACT_LENGTH);
         this.result = buf.readEnumValue(Result.class);
-        this.value = buf.readByteArray();
+        this.redeemedClient = buf.readString(DEF.CLIENTNAME_MAX_LENGTH);
     }
 
     public void writePacketData(RPacketBuffer buf) throws IOException{
-        buf.writeString(this.artifactId);
         buf.writeEnumValue(this.result);
-        buf.writeByteArray(this.value);
+        buf.writeString(redeemedClient);
     }
 
     public enum Result {
-        FILE,
-        BYTE,
-        NO_ACCES,
-        INVALID_AUTH,
-        INTERNAL_ERROR,
-        NOT_FOUND
+        SUCCES,
+        INVALID_TOKEN,
+        INVALID_SESSION,
+        INTERNAL_ERROR
     }
 
 }

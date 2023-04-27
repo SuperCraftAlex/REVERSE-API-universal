@@ -11,10 +11,11 @@ public class ClientInfo implements Bufferable<ClientInfo> {
     public String name;
     public String visibleName;
     public String description;
-    public String[] versions;
+    public String[] allowedVersions;
     public String[] authors;
     public int clientId;
     public String defaultLaunchArgs;
+    public ClientLicense license;
 
     public List<Downloadable> downloads;
 
@@ -23,10 +24,11 @@ public class ClientInfo implements Bufferable<ClientInfo> {
         this.name = buf.readString(DEF.CLIENTNAME_MAX_LENGTH);
         this.visibleName = buf.readString(DEF.CLIENTNAME_MAX_LENGTH);
         this.description = buf.readString(DEF.STRING_LENGTH);
-        this.versions = buf.readStringArray(2_000);
+        this.allowedVersions = buf.readStringArray(20_000);
         this.authors = buf.readStringArray(30);
         this.clientId = buf.readVarInt();
         this.defaultLaunchArgs = buf.readString(DEF.STRING_LENGTH);
+        this.license.readData(buf);
         this.downloads = (List<Downloadable>) buf.readList(Downloadable.class);
 
         return this;
@@ -37,10 +39,11 @@ public class ClientInfo implements Bufferable<ClientInfo> {
         buf.writeString(this.name);
         buf.writeString(this.visibleName);
         buf.writeString(this.description);
-        buf.writeStringArray(this.versions);
+        buf.writeStringArray(this.allowedVersions);
         buf.writeStringArray(this.authors);
         buf.writeVarInt(this.clientId);
         buf.writeString(this.defaultLaunchArgs);
+        this.license.writeData(buf);
         buf.writeList(downloads);
     }
 

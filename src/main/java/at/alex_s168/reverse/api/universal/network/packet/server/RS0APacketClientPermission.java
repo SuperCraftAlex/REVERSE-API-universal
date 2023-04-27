@@ -5,23 +5,26 @@ import at.alex_s168.reverse.api.universal.network.packet.RPacket;
 
 import java.io.IOException;
 
-// returned by server after RC05 or RC0D
-public class RS04PacketSessionInfo implements RPacket
+public class RS0APacketClientPermission implements RPacket
 {
-    public int expirationDate;
+    public boolean isUseAllowed() {
+        return allowUse;
+    }
 
-    public RS04PacketSessionInfo() {}
+    private boolean allowUse;
 
-    public RS04PacketSessionInfo(int expirationDate) {
-        this.expirationDate = expirationDate;
+    public RS0APacketClientPermission() {}
+
+    public RS0APacketClientPermission(boolean allowUse) {
+        this.allowUse = allowUse;
     }
 
     public void readPacketData(RPacketBuffer buf) throws IOException {
-        this.expirationDate = buf.readVarInt();
+        this.allowUse = buf.readBoolean();
     }
 
     public void writePacketData(RPacketBuffer buf) throws IOException{
-        buf.writeVarInt(this.expirationDate);
+        buf.writeBoolean(allowUse);
     }
 
 }

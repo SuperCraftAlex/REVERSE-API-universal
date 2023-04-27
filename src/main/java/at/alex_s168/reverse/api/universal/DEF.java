@@ -12,5 +12,7 @@ public class DEF {
     public static int LAUNCHTOKEN_LENGTH = 32;
     public static int HWID_LENGTH = 32;
     public static int ARTIFACT_LENGTH = 64;
+    public static int CLIENTTOKEN_LENGTH = 32;
+    public static int PASSWORD_LENGTH = 32;
 
 }

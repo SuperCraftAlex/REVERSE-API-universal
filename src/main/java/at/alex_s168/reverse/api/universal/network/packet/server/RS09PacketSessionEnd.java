@@ -1,27 +1,28 @@
 package at.alex_s168.reverse.api.universal.network.packet.server;
 
+import at.alex_s168.reverse.api.universal.DEF;
 import at.alex_s168.reverse.api.universal.network.RPacketBuffer;
 import at.alex_s168.reverse.api.universal.network.packet.RPacket;
 
 import java.io.IOException;
 
-// returned by server after RC05 or RC0D
-public class RS04PacketSessionInfo implements RPacket
+// notifies the client that the session has ended
+public class RS09PacketSessionEnd implements RPacket
 {
-    public int expirationDate;
+    public String sid;
 
-    public RS04PacketSessionInfo() {}
+    public RS09PacketSessionEnd() {}
 
-    public RS04PacketSessionInfo(int expirationDate) {
-        this.expirationDate = expirationDate;
+    public RS09PacketSessionEnd(String sid, int expirationDate) {
+        this.sid = sid;
     }
 
     public void readPacketData(RPacketBuffer buf) throws IOException {
-        this.expirationDate = buf.readVarInt();
+        this.sid = buf.readString(DEF.SESSIONID_LENGTH);
     }
 
     public void writePacketData(RPacketBuffer buf) throws IOException{
-        buf.writeVarInt(this.expirationDate);
+        buf.writeString(this.sid);
     }
 
 }
