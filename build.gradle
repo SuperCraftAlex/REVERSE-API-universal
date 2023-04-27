@@ -1,0 +1,35 @@
+plugins {
+    id 'java'
+}
+
+compileJava.options.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+apply plugin:'application'
+applicationDefaultJvmArgs = ["-Djava.library.path=natives"]
+
+mainClassName = 'Start'
+
+group 'at.alex_s168'
+version '1.0'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    jcenter()
+    maven { url 'https://jitpack.io' }
+}
+
+configurations {
+    extraLibs
+    runtime
+}
+
+dependencies {
+    runtime 'commons-lang:commons-lang:2.6'
+    interpret 'io.netty:netty-all:4.1.63.Final'
+}
