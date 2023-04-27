@@ -12,3 +12,13 @@ TODO:
 - packet friends
 - irc (packet send , packet get all chat, packet new message)
 - packet cosmetics 
+- RSession class
+- Packet client info: Dependency Class 
+- Packet Session creation result: ip of the server where session is created
+- Packet class -> RPacket class
+- packet config (list, modify(upload, edit...), download)
+- packet session create: result enum (succes, invalid_token...)
+- packet changelog
+- packet aviable list: String[] owned, String[] aviable
+- packet launchtoken verify (mc client)
+- packet get profile (from launchtoken = mc client)
